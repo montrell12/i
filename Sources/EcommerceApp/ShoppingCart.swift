@@ -7,7 +7,12 @@ public class ShoppingCart: ObservableObject {
     public init() {}
     
     /// Adds a product to the cart
+    /// - Parameters:
+    ///   - product: The product to add
+    ///   - quantity: The quantity to add (must be positive, defaults to 1)
     public func addItem(_ product: Product, quantity: Int = 1) {
+        guard quantity > 0 else { return }
+        
         if let index = items.firstIndex(where: { $0.product.id == product.id }) {
             items[index].quantity += quantity
         } else {
@@ -22,13 +27,16 @@ public class ShoppingCart: ObservableObject {
     }
     
     /// Updates the quantity of an item in the cart
+    /// - Parameters:
+    ///   - item: The cart item to update
+    ///   - quantity: The new quantity (item is removed if quantity is 0 or negative)
     public func updateQuantity(for item: CartItem, quantity: Int) {
-        if let index = items.firstIndex(where: { $0.id == item.id }) {
-            if quantity > 0 {
-                items[index].quantity = quantity
-            } else {
-                items.remove(at: index)
-            }
+        guard let index = items.firstIndex(where: { $0.id == item.id }) else { return }
+        
+        if quantity > 0 {
+            items[index].quantity = quantity
+        } else {
+            items.remove(at: index)
         }
     }
     

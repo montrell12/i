@@ -122,4 +122,25 @@ final class ShoppingCartTests: XCTestCase {
         
         XCTAssertEqual(cart.itemCount, 5)
     }
+    
+    func testAddItemWithZeroQuantityIsIgnored() {
+        cart.addItem(sampleProduct, quantity: 0)
+        
+        XCTAssertTrue(cart.items.isEmpty)
+    }
+    
+    func testAddItemWithNegativeQuantityIsIgnored() {
+        cart.addItem(sampleProduct, quantity: -5)
+        
+        XCTAssertTrue(cart.items.isEmpty)
+    }
+    
+    func testUpdateQuantityWithNegativeRemovesItem() {
+        cart.addItem(sampleProduct)
+        let item = cart.items.first!
+        
+        cart.updateQuantity(for: item, quantity: -1)
+        
+        XCTAssertTrue(cart.items.isEmpty)
+    }
 }
