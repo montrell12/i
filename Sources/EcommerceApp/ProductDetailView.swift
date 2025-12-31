@@ -6,6 +6,7 @@ public struct ProductDetailView: View {
     @EnvironmentObject var cart: ShoppingCart
     @State private var quantity: Int = 1
     @State private var showingAddedAlert = false
+    @State private var addedQuantity: Int = 0
     
     public init(product: Product) {
         self.product = product
@@ -115,6 +116,7 @@ public struct ProductDetailView: View {
                     
                     // Add to Cart Button
                     Button(action: {
+                        addedQuantity = quantity
                         cart.addItem(product, quantity: quantity)
                         showingAddedAlert = true
                         quantity = 1
@@ -137,7 +139,7 @@ public struct ProductDetailView: View {
         .alert("Added to Cart", isPresented: $showingAddedAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("\(quantity) x \(product.name) added to your cart")
+            Text("\(addedQuantity) x \(product.name) added to your cart")
         }
     }
 }
